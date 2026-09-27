@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>မမအတွက် ဖြူ့ရဲ့ Little Care Surprise 🤍</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+body{
+  font-family:"Noto Sans Myanmar","Myanmar Text",sans-serif;
+  background:#050511;
+  color:white;
+}
+
+#app{
+  width:100%;
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+
+  background:
+  radial-gradient(circle at 20% 20%,rgba(255,255,255,.10),transparent 20%),
+  radial-gradient(circle at 80% 30%,rgba(255,170,220,.13),transparent 25%),
+  linear-gradient(145deg,#050511,#11132d 50%,#090817);
+}
+
+.scene{
+  position:absolute;
+  inset:0;
+
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  padding:35px 18px 70px;
+
+  overflow-y:auto;
+  text-align:center;
+
+  animation:fade .65s ease;
+}
+
+.scene.active{
+  display:flex;
+}
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(20px) scale(.98);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.card{
+  width:min(94vw,520px);
+  max-height:88vh;
+  overflow-y:auto;
+
+  padding:30px 22px;
+
+  border-radius:30px;
+
+  background:rgba(255,255,255,.09);
+
+  border:1px solid rgba(255,255,255,.18);
+
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
+
+  box-shadow:
+  0 20px 70px rgba(0,0,0,.4),
+  inset 0 1px rgba(255,255,255,.1);
+}
+
+.card::-webkit-scrollbar{
+  width:0;
+}
+
+h1{
+  font-size:clamp(30px,8vw,46px);
+  line-height:1.4;
+  margin-bottom:18px;
+}
+
+h2{
+  font-size:clamp(23px,6vw,34px);
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+p{
+  font-size:clamp(16px,4.4vw,20px);
+  line-height:2;
+  margin:8px 0;
+}
+
+.big{
+  font-size:clamp(22px,6vw,32px);
+  line-height:1.7;
+}
+
+.small{
+  font-size:14px;
+  opacity:.75;
+  line-height:1.8;
+}
+
+.highlight{
+  color:#ffd9ed;
+  font-weight:bold;
+}
+
+.glow{
+  text-shadow:0 0 25px rgba(255,200,235,.55);
+}
+
+.emoji{
+  font-size:48px;
+  margin-bottom:14px;
+}
+
+.divider{
+  width:80px;
+  height:2px;
+  margin:20px auto;
+  border-radius:20px;
+  background:rgba(255,255,255,.3);
+}
+
+.checklist{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  margin:18px 0;
+
+  text-align:left;
+}
+
+.check{
+  padding:12px 14px;
+
+  border-radius:16px;
+
+  background:rgba(255,255,255,.07);
+
+  font-size:16px;
+  line-height:1.7;
+}
+
+button{
+  border:none;
+  outline:none;
+
+  margin:7px;
+  padding:14px 20px;
+
+  border-radius:999px;
+
+  color:white;
+  background:rgba(255,255,255,.14);
+
+  border:1px solid rgba(255,255,255,.2);
+
+  font-family:inherit;
+  font-size:16px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:.25s;
+}
+
+button:active{
+  transform:scale(.94);
+}
+
+.primary{
+  background:linear-gradient(135deg,#ff9fcf,#bda7ff);
+  color:#28152d;
+}
+
+#progress{
+  position:fixed;
+  top:13px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  display:flex;
+  gap:4px;
+
+  max-width:90vw;
+
+  flex-wrap:wrap;
+  justify-content:center;
+
+  z-index:100;
+}
+
+.dot{
+  width:5px;
+  height:5px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.25);
+
+  transition:.3s;
+}
+
+.dot.active{
+  width:18px;
+  background:white;
+  border-radius:10px;
+}
+
+#hint{
+  position:fixed;
+
+  bottom:15px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  font-size:13px;
+
+  opacity:.5;
+
+  z-index:100;
+}
+
+.star{
+  position:fixed;
+
+  width:3px;
+  height:3px;
+
+  border-radius:50%;
+
+  background:white;
+
+  opacity:.7;
+
+  pointer-events:none;
+
+  animation:twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle{
+  from{
+    opacity:.15;
+    transform:scale(.7);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1.5);
+  }
+}
+
+.heart{
+  position:fixed;
+
+  pointer-events:none;
+
+  z-index:200;
+
+  animation:heartFloat 3s ease-out forwards;
+}
+
+@keyframes heartFloat{
+  0%{
+    opacity:1;
+    transform:translateY(0) scale(.7);
+  }
+
+  100%{
+    opacity:0;
+    transform:translateY(-300px) scale(1.5) rotate(25deg);
+  }
+}
+
+.confetti{
+  position:fixed;
+
+  width:8px;
+  height:8px;
+
+  z-index:190;
+
+  pointer-events:none;
+
+  animation:fall 2.2s ease-out forwards;
+}
+
+@keyframes fall{
+  0%{
+    opacity:1;
+    transform:translate(0,0) rotate(0);
+  }
+
+  100%{
+    opacity:0;
+    transform:
+      translate(var(--x),var(--y))
+      rotate(700deg);
+  }
+}
+
+.envelope{
+  width:220px;
+  height:150px;
+
+  margin:25px auto;
+
+  position:relative;
+
+  background:linear-gradient(145deg,#fff,#ffddeb);
+
+  border-radius:12px;
+
+  box-shadow:
+    0 20px 50px rgba(255,180,220,.3);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#70465f;
+
+  padding:20px;
+}
+
+.envelope:before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  border-left:110px solid transparent;
+  border-right:110px solid transparent;
+  border-top:75px solid #f2c7df;
+}
+
+.envelope span{
+  position:relative;
+  z-index:2;
+
+  font-size:13px;
+  line-height:1.7;
+
+  font-weight:bold;
+}
+
+.final{
+  background:
+  radial-gradient(
+    circle at 50% 30%,
+    rgba(255,200,235,.18),
+    transparent 30%
+  ),
+  radial-gradient(
+    circle at 30% 80%,
+    rgba(180,180,255,.12),
+    transparent 30%
+  );
+}
+
+.question{
+  font-size:clamp(23px,6vw,32px);
+  line-height:1.7;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<div id="progress"></div>
+
+<div id="hint">
+tap to continue 🤍
+</div>
+
+<script>
+
+const scenes = [
+
+/* 1 */
+`
+<div class="card">
+
+<div class="emoji">🌙🤍</div>
+
+<h1 class="glow">
+မမရေ… 🥺
+</h1>
+
+<p>
+ဒီတစ်ခါ ဖြူက မမကို ဘာကြီးမှ တောင်းဆိုချင်လို့ မဟုတ်ဘူးနော်။
+</p>
+
+<p>
+မမရဲ့ တစ်နေ့တာလေးကို နည်းနည်းပိုဂရုစိုက်စေချင်လို့၊
+မမကျန်းမာနေစေချင်လို့၊
+မမပင်ပန်းရင် ခဏနားတတ်စေချင်လို့
+ဖြူက ပြောချင်တာလေးတွေရှိလို့ပါ။ 🌷
+</p>
+
+<div class="divider"></div>
+
+<p class="big">
+ဖြည်းဖြည်းလေး ဖတ်သွားနော်… 🤍
+</p>
+
+</div>
+`,
+
+/* 2 */
+`
+<div class="card">
+
+<div class="emoji">💌</div>
+
+<h2>
+မမအတွက် Surprise လေးရှိတယ်… 👀🤍
+</h2>
+
+<div class="envelope">
+
+<span>
+MMS…<br>
+ဒီနေ့အတွက် မမမသိသေးတဲ့<br>
+little care surprise လေးရှိတယ် 🤍
+</span>
+
+</div>
+
+<p>
+ဒီစာလေးတွေက အကုန်လုံး မမအတွက်ပဲနော်။ 🥺
+</p>
+
+</div>
+`,
+
+/* 3 */
+`
+<div class="card">
+
+<div class="emoji">🌤️</div>
+
+<h2>
+🌤️ မနက်ခင်းလေးကစမယ်
+</h2>
+
+<p>
+မမ မနက်အိပ်ရာနိုးပြီဆို
+အရင်ဆုံး ရေလေးသောက်ပေးနော်။ 💧
+</p>
+
+<p>
+မျက်နှာသစ်၊ သန့်ရှင်းရေးလုပ်ပြီး
+မနက်စာလေးလည်း စားပေးပါ။
+</p>
+
+<div class="checklist">
+
+<div class="check">💧 ရေလေးသောက်</div>
+
+<div class="check">🧼 သန့်ရှင်းရေးလုပ်</div>
+
+<div class="check">🍞 မနက်စာစား</div>
+
+</div>
+
+<p>
+မနက်စာမစားဘဲ အပြေးအလွှားထွက်တာမျိုး
+မလုပ်နဲ့ဦးနော်။ 🥺
+</p>
+
+</div>
+`,
+
+/* 4 */
+`
+<div class="card">
+
+<div class="emoji">🎒</div>
+
+<h2>
+🎒 ကျောင်းသွားတဲ့အချိန်
+</h2>
+
+<p>
+မမ ကျောင်းသွားတဲ့အချိန်
+လမ်းကို သေချာကြည့်ပြီး သွားနော်။
+</p>
+
+<p>
+အလျင်လိုပြီး မပြေးနဲ့ဦး။ 🥺
+</p>
+
+<p>
+မိုးရွာရင် ချော်မလဲအောင် သတိထား၊
+နေပူရင်လည်း ရေလေးသောက်ပေးနော်။ ☁️💧
+</p>
+
+<p class="highlight">
+မမကိုယ်မမ ထိခိုက်မိတာမျိုး
+ဖြူမလိုချင်ဘူး။ 🤍
+</p>
+
+</div>
+`,
+
+/* 5 */
+`
+<div class="card">
+
+<div class="emoji">🏫📚</div>
+
+<h2>
+🏫 စာသင်ချိန်မှာ
+</h2>
+
+<p>
+ကျောင်းရောက်ရင် စာကို အာရုံစိုက်နော်။ 📚
+</p>
+
+<p>
+မရတာရှိရင်
+“ငါမတတ်ဘူး” ဆိုပြီး စိတ်မညစ်နဲ့။
+</p>
+
+<p>
+မရတာကို ပြန်မေးလို့ရတယ်။
+ပြန်လေ့လာလို့ရတယ်။
+</p>
+
+<p>
+တစ်ခါမရတာနဲ့
+မမက မတော်တဲ့သူဖြစ်သွားတာ မဟုတ်ဘူးနော်။ 🌷
+</p>
+
+<p>
+Break time ရရင်လည်း ခဏနားပြီး
+ရေလေးသောက်ပေးနော်။ 💧
+</p>
+
+</div>
+`,
+
+/* 6 */
+`
+<div class="card">
+
+<div class="emoji">🍚🤍</div>
+
+<h2>
+🍚 အစားအစာလေးလည်း မမမမေ့နဲ့နော်
+</h2>
+
+<div class="checklist">
+
+<div class="check">
+💧 ရေလေး မကြာမကြာသောက်ပေးပါ။
+</div>
+
+<div class="check">
+🍚 အစားကို အချိန်မှန်စားပါ။
+</div>
+
+<div class="check">
+🥗 အာဟာရရှိတာလေးတွေ စားပေးပါ။
+</div>
+
+<div class="check">
+🚫 မမနဲ့ မတည့်တဲ့အစားအစာတွေကို ရှောင်ပေးနော်။
+</div>
+
+</div>
+
+<p>
+အဲ့ဒီအရာလေးတွေက သေးသေးလေးပဲလိုထင်ရပေမယ့်
+မမကို ကောင်းကောင်းဂရုစိုက်ဖို့ဆိုရင်
+တစ်ခုချင်းစီက အရေးကြီးတယ်နော်။ 🤍
+</p>
+
+<p class="highlight">
+ထမင်းမစားဘဲ ကျူရှင်ကို တန်းမပြေးနဲ့ဦး။ 😭
+</p>
+
+<p>
+အရင် အစားလေးစားပြီးမှ သွားနော်။
+</p>
+
+</div>
+`,
+
+/* 7 */
+`
+<div class="card">
+
+<div class="emoji">☀️🌧️</div>
+
+<h2>
+☀️ အပြင်မှာဆို သတိထားနော်
+</h2>
+
+<p>
+ပူလွန်းတာ၊ ချွန်ထက်တာ၊
+အန္တရာယ်ရှိနိုင်တာတွေကို
+သတိမထားဘဲ မကိုင်နဲ့နော်။
+</p>
+
+<p>
+မသေချာတဲ့အရာတွေကိုလည်း
+တစ်ယောက်တည်း မစမ်းနဲ့။
+</p>
+
+<p>
+မမကိုယ်မမ ထိခိုက်မိနိုင်တဲ့အရာဆို
+အရင်သတိထားပြီးမှ လုပ်ပါ။ 🤍
+</p>
+
+<p class="highlight">
+မမက ဖြူ့အတွက် တန်ဖိုးရှိလို့
+သေးသေးလေးကအစ ဂရုစိုက်စေချင်တာပါ။ 🌷
+</p>
+
+</div>
+`,
+
+/* 8 */
+`
+<div class="card">
+
+<div class="emoji">🩹🥺</div>
+
+<h2>
+🩹 တစ်ခုခုထိခိုက်မိရင်
+</h2>
+
+<p>
+မမတစ်ယောက်တည်း လုပ်မနေဘဲ
+အိမ်က လူကြီးတွေကို ပြောနော်။
+</p>
+
+<p>
+အနာရှိရင် သန့်ရှင်းစွာဂရုစိုက်ပြီး
+လိုအပ်ရင် အကူအညီတောင်းပါ။
+</p>
+
+<p>
+ဆေးလိမ်းတာ၊ ဆေးသောက်တာမျိုးဆို
+လူကြီးတွေ ဒါမှမဟုတ် ကျန်းမာရေးပညာရှင်တွေရဲ့
+အကြံပြုချက်နဲ့ လုပ်ပေးနော်။ 🤍
+</p>
+
+</div>
+`,
+
+/* 9 */
+`
+<div class="card">
+
+<div class="emoji">🥺</div>
+
+<h2>
+💊 တစ်ခုခုသုံးပြီး မအဆင်ပြေရင်
+</h2>
+
+<p>
+ဆေး ဒါမှမဟုတ် ပစ္စည်းတစ်ခုခုသုံးပြီး
+အရမ်းစပ်တာ၊ နာကျင်တာ၊
+ပိုဆိုးလာတာမျိုးဖြစ်ရင်
+</p>
+
+<p class="highlight">
+“ခံထားလိုက်မယ်” ဆိုပြီး မခံနဲ့နော်။
+</p>
+
+<p>
+လူကြီးကို ပြောပြီး
+လိုအပ်ရင် ကျန်းမာရေးပညာရှင်ကို မေးပါ။ 🤍
+</p>
+
+</div>
+`,
+
+/* 10 */
+`
+<div class="card">
+
+<div class="emoji">🏠🤍</div>
+
+<h2>
+🏠 ကျောင်းကနေ အိမ်ပြန်ရောက်ရင်
+</h2>
+
+<p>
+အိမ်ပြန်ရောက်တာနဲ့
+စာအုပ်ကို တန်းဖွင့်စရာမလိုဘူးနော်။
+</p>
+
+<p>
+အရင် ရေလေးသောက်၊
+အစားလေးစား၊
+ခဏနားပြီးမှ အိမ်စာဆက်လုပ်ပါ။ 🤍
+</p>
+
+<p>
+တစ်နေ့လုံး ပင်ပန်းလာတာကို
+ခန္ဓာကိုယ်လေးလည်း အနားပေးရမယ်နော်။
+</p>
+
+</div>
+`,
+
+/* 11 */
+`
+<div class="card">
+
+<div class="emoji">📖✨</div>
+
+<h2>
+📖 ကျူရှင်မှာလည်း
+</h2>
+
+<p>
+ပင်ပန်းနေရင် ခဏနားပြီးမှ သွားနော်။
+</p>
+
+<p>
+မသိတာရှိရင် ဆရာ/ဆရာမကို မေးပါ။
+</p>
+
+<p>
+မေးတာရှက်စရာမဟုတ်ဘူးနော်။
+</p>
+
+<p>
+ဖြည်းဖြည်းချင်း နားလည်အောင်လုပ်ရင်
+ရလာမှာပါ။ 📚🤍
+</p>
+
+</div>
+`,
+
+/* 12 */
+`
+<div class="card">
+
+<div class="emoji">🌙🎒</div>
+
+<h2>
+🌙 ကျူရှင်ကပြန်ရောက်ရင်
+</h2>
+
+<p>
+အိမ်ပြန်ရောက်တာနဲ့
+စာအုပ်ပဲ တန်းမဖွင့်နဲ့ဦး။ 😭
+</p>
+
+<p>
+ရေလေးသောက်၊
+အစားလေးစား၊
+ခဏနားပြီးမှ အိမ်စာဆက်လုပ်နော်။
+</p>
+
+<p>
+ပင်ပန်းရင် ခဏနားတာက
+စာမကြိုးစားတာ မဟုတ်ဘူးနော်။ 🌷
+</p>
+
+</div>
+`,
+
+/* 13 */
+`
+<div class="card">
+
+<div class="emoji">📱👀</div>
+
+<h2>
+👀 ဖုန်းနဲ့ မျက်လုံးလေးကိုလည်း ဂရုစိုက်နော်
+</h2>
+
+<p>
+ဖုန်းကို မျက်လုံးနဲ့ အရမ်းနီးနီး မကြည့်နဲ့။
+</p>
+
+<p>
+အကြာကြီးကြည့်ပြီး မျက်လုံးပင်ပန်းလာရင်
+ခဏနားပေးနော်။ 👀🤍
+</p>
+
+<p>
+စာလုပ်ရင်းလည်း တစ်နေရာတည်း
+အကြာကြီးမထိုင်ဘဲ
+ခဏထပြီး ကိုယ်လက်လေး လှုပ်ရှားပေး။
+</p>
+
+<p>
+ကိုယ့်ခန္ဓာကိုယ်လေးကိုလည်း
+စာလောက်အရေးကြီးတယ်လို့ မှတ်ထားနော်။ 🌷
+</p>
+
+</div>
+`,
+
+/* 14 */
+`
+<div class="card">
+
+<div class="emoji">🌦️☀️🌧️</div>
+
+<h2>
+🌦️ ရာသီဥတုလေးနဲ့အတူ
+</h2>
+
+<p>
+နေပူလွန်းရင် ရေလေးပိုသောက်။
+</p>
+
+<p>
+မိုးရွာရင် ချော်မလဲအောင် သတိထား။
+</p>
+
+<p>
+အပြင်ထွက်ရင်လည်း
+ရာသီဥတုနဲ့ ကိုက်ညီအောင်
+ကိုယ့်ကိုယ်ကို ဂရုစိုက်ပေးနော်။ 🤍
+</p>
+
+</div>
+`,
+
+/* 15 */
+`
+<div class="card">
+
+<div class="emoji">🥺🌷</div>
+
+<h2>
+🌷 စိတ်ပင်ပန်းတဲ့နေ့တွေရှိရင်
+</h2>
+
+<p>
+တစ်နေ့လုံး အဆင်ပြေနေဖို့ မလိုဘူးနော်။
+</p>
+
+<p>
+ပင်ပန်းရင် ပင်ပန်းတယ်လို့ ခံစားလို့ရတယ်။
+</p>
+
+<p>
+ဝမ်းနည်းရင်လည်း ခဏနားပြီး
+စိတ်ကို ဖြည်းဖြည်းပြန်သက်သာအောင်
+ထားလို့ရတယ်။ 🤍
+</p>
+
+<p>
+မရတဲ့နေ့ရှိနိုင်တယ်။
+မလုပ်နိုင်တဲ့နေ့လည်း ရှိနိုင်တယ်။
+</p>
+
+<p>
+အဲ့ဒါကြောင့် မမက မကောင်းတဲ့သူ
+ဒါမှမဟုတ် မတော်တဲ့သူ ဖြစ်သွားတာမဟုတ်ဘူး။
+</p>
+
+<p class="highlight">
+နားပြီးရင် ပြန်စလို့ရတယ်နော်။ 🌷
+</p>
+
+</div>
+`,
+
+/* 16 */
+`
+<div class="card">
+
+<div class="emoji">🥺🤍</div>
+
+<h2>
+🤍 ငိုချင်ရင်လည်း ငိုလို့ရတယ်
+</h2>
+
+<p>
+ငိုချင်ရင် ခဏငိုလို့ရတယ်နော်။
+</p>
+
+<p>
+ပြီးရင် ရေလေးသောက်ပြီး
+ခဏနားပေးပါ။ 🤍
+</p>
+
+<p>
+အရမ်းမအီမသာဖြစ်တာ၊
+မူးဝေတာ၊
+နေမကောင်းတာရှိရင်တော့
+အိမ်က လူကြီးတွေကို ပြောနော်။
+</p>
+
+<p>
+တစ်ယောက်တည်း ခံစားမနေပါနဲ့။ 🫶🏻
+</p>
+
+</div>
+`,
+
+/* 17 */
+`
+<div class="card">
+
+<div class="emoji">🫶🏻🤍</div>
+
+<h2>
+🫶🏻 မမနေမကောင်းဖြစ်ရင်
+</h2>
+
+<p>
+မမ နေမကောင်းဖြစ်ရင်
+တစ်ယောက်တည်း မခံစားနေနဲ့နော်။
+</p>
+
+<p>
+အိမ်က လူကြီးတွေကို ပြောပါ။ 🤍
+</p>
+
+<p>
+လိုအပ်ရင် သူတို့ကို အကူအညီတောင်းပါ။
+</p>
+
+<p>
+မမက အားလုံးကို တစ်ယောက်တည်း
+ခံနိုင်ရမယ်ဆိုတာ မဟုတ်ဘူးနော်…
+</p>
+
+<p class="highlight">
+ကိုယ့်အတွက် အကူအညီတောင်းတတ်တာလည်း
+ကိုယ့်ကိုယ်ကို ဂရုစိုက်တာပါပဲ။ 🫶🏻
+</p>
+
+</div>
+`,
+
+/* 18 */
+`
+<div class="card">
+
+<div class="emoji">📚✨</div>
+
+<h2>
+📚 မမရဲ့ အနာဂတ်လေးအတွက်
+</h2>
+
+<p>
+စာကို နည်းနည်းစီ ပုံမှန်လုပ်နော်။
+</p>
+
+<p>
+မရရင် စိတ်မညစ်နဲ့။
+</p>
+
+<p>
+ထပ်ကြိုးစားလို့ရတယ်။
+</p>
+
+<p>
+ပင်ပန်းရင် ခဏနား။
+နားပြီးရင် ပြန်စ။
+</p>
+
+<div class="divider"></div>
+
+<p>
+ဖြူက မမတစ်နေ့မှာ
+ကိုယ်လိုချင်တဲ့အရာတွေ ရလာတာကို
+မြင်ချင်တယ်။ 🤍
+</p>
+
+</div>
+`,
+
+/* 19 */
+`
+<div class="card">
+
+<div class="emoji">🌙😴</div>
+
+<h2>
+🌙 အိပ်ချိန်လေးရောက်ရင်
+</h2>
+
+<p>
+မမ…
+ဒီတစ်ခုတော့ ဖြူ့စကားနားထောင်ပေးနော်။ 🥺
+</p>
+
+<p class="big">
+ညဘက်တွေ စောစောအိပ်ပေးပါ။ 🌙
+</p>
+
+<p>
+ဖုန်းလေးချထားပြီး
+မျက်လုံးလေးမှိတ်…
+</p>
+
+<p>
+ခန္ဓာကိုယ်လေးကို အနားပေး…
+</p>
+
+<p class="highlight">
+မနက်ဖြန်ရဲ့ မမလေးက
+ဒီညကောင်းကောင်းအိပ်ထားတဲ့
+မမလေးဖြစ်ရမယ်နော်။ 🤍
+</p>
+
+<div class="divider"></div>
+
+<p>
+“ဒီညတော့ ဖုန်းကို မနိုင်စေနဲ့နော် 😭
+အိပ်ချိန်ကိုပဲ အနိုင်ပေးလိုက်။ 🌙”
+</p>
+
+</div>
+`,
+
+/* 20 */
+`
+<div class="card">
+
+<div class="emoji">🤍🌷</div>
+
+<h2>
+🤍 မမတစ်ယောက်တည်း မဟုတ်ဘူးနော်
+</h2>
+
+<p>
+မမရေ… 🥺🤍
+</p>
+
+<p>
+တစ်ခါတလေ မမအနားမှာ
+ဘယ်သူမှ မရှိသလို ခံစားရတဲ့အချိန်တွေရှိရင်လည်း
+မမတစ်ယောက်တည်း မဟုတ်ဘူးနော်။ 🌷
+</p>
+
+<p class="big highlight">
+ဘယ်သူတွေ မမအနားမှာ မရှိနေလည်း…
+<br><br>
+ဖြူက မမဘေးမှာ
+အမြဲရှိနေမယ်နော်။ 🤍
+</p>
+
+<p>
+မမစိတ်ညစ်စရာတစ်ခုခုရှိရင်
+တစ်ယောက်တည်း သိမ်းထားမနေဘဲ
+ဖြူ့ကို သတိရပေးပါနော်။ 🥺
+</p>
+
+</div>
+`,
+
+/* 21 */
+`
+<div class="card">
+
+<div class="emoji">🌷🫶🏻</div>
+
+<h2>
+💌 မမစိတ်ညစ်တဲ့အချိန်
+</h2>
+
+<p>
+“အခုတော့ နည်းနည်းပင်ပန်းနေတယ်…”
+</p>
+
+<p>
+“စိတ်ညစ်နေတယ်…”
+</p>
+
+<p>
+ဆိုပြီး ဖြူ့ကို သတိရလိုက်ရုံလေးနဲ့တောင် ရတယ်။ 🤍
+</p>
+
+<p>
+မမပြောချင်တဲ့အချိန်ဆို ပြောလို့ရတယ်။
+</p>
+
+<p>
+မပြောချင်သေးရင်လည်း အဆင်ပြေတယ်။
+</p>
+
+<p>
+ခဏတိတ်တိတ်လေး နေချင်ရင်လည်း နေလို့ရတယ်။ 🌷
+</p>
+
+<p>
+ဖြူက မမရဲ့စိတ်ကို အတင်းမမေးဘူးနော်။
+</p>
+
+<p>
+မမအဆင်ပြေတဲ့အချိန်မှာပဲ
+ဖြည်းဖြည်းလေး ပြောလို့ရတယ်။ 🫶🏻
+</p>
+
+</div>
+`,
+
+/* 22 */
+`
+<div class="card">
+
+<div class="emoji">🌙🤍</div>
+
+<h2>
+🌙 မမစိတ်ညစ်တဲ့အချိန်တိုင်း
+</h2>
+
+<p class="highlight">
+“ဖြူကို သတိရလိုက်မယ်”
+ဆိုတာလေး မမမမေ့နဲ့နော်။ 🥺🤍
+</p>
+
+<div class="divider"></div>
+
+<p>
+ဘယ်သူတွေ မမအနားမှာ
+မရှိနိုင်တဲ့အချိန်ဖြစ်ဖြစ်…
+</p>
+
+<p>
+မမက တစ်ယောက်တည်းလို့
+မခံစားရအောင်
+</p>
+
+<p class="big highlight">
+ဖြူက မမကို
+အမြဲဂရုစိုက်နေမယ်နော်။ 🌙🤍
+</p>
+
+<p>
+မမရဲ့ ပျော်တဲ့အချိန်တွေမှာလည်း
+ဖြူ့ကို သတိရပါ။
+</p>
+
+<p>
+စိတ်ညစ်တဲ့အချိန်တွေမှာလည်း
+ဖြူ့ကို သတိရပါနော်။ 🌷
+</p>
+
+</div>
+`,
+
+/* 23 */
+`
+<div class="card">
+
+<div class="emoji">🥺🤍</div>
+
+<h2>
+🌷 မမအတွက် ဖြူက ပြောချင်တာ
+</h2>
+
+<div class="divider"></div>
+
+<p class="big highlight">
+“မမရေ…
+<br>
+မမတစ်ယောက်တည်း မဟုတ်ဘူးနော်။
+<br>
+ဖြူရှိတယ်။ 🤍”
+</p>
+
+<p>
+မမအဆင်ပြေတဲ့အချိန်မှာပဲ
+ဖြည်းဖြည်းလေး ပြောလို့ရတယ်နော်။ 🌷
+</p>
+
+</div>
+`,
+
+/* 24 */
+`
+<div class="card">
+
+<div class="emoji">😳🤍</div>
+
+<p class="small">
+Wait… 😳
+</p>
+
+<h2>
+ဒါတွေအားလုံးပြောပြီးမှ
+ဖြူက မမကို မေးစရာတစ်ခုရှိသေးတယ်…
+</h2>
+
+<div class="divider"></div>
+
+<p class="question">
+မမက ဖြူပြောတာတွေ
+နားထောင်ပေးမှာလား? 👀🤍
+</p>
+
+<button class="primary" onclick="answer(event)">
+🤍 ဟုတ်တယ် 🥺
+</button>
+
+<button onclick="answer(event)">
+😭 ဟုတ်တယ်လို့ပဲ ပြောရမယ် 🤍
+</button>
+
+</div>
+`,
+
+/* 25 */
+`
+<div class="card">
+
+<div class="emoji">🥺🫶🏻</div>
+
+<h1 class="glow">
+အဲ့ဒါဆို
+<br>
+ဖြူ စိတ်ချပြီ။ 🥺🫶🏻
+</h1>
+
+<p>
+မမက ဖြူပြောတာလေးတွေ နားထောင်ပေးမယ်ဆိုတော့
+ဖြူလည်း နည်းနည်းစိတ်အေးသွားပြီ။ 🤍
+</p>
+
+<p>
+ဒါပေမယ့် မမကို အတင်းအကျပ်လုပ်စေချင်တာမဟုတ်ဘူးနော်…
+</p>
+
+<p>
+မမအတွက် ကောင်းစေချင်လို့
+ဖြူက ဒီလိုပြောနေတာပါ။ 🌷
+</p>
+
+</div>
+`,
+
+/* 26 */
+`
+<div class="card">
+
+<div class="emoji">🤍🌷</div>
+
+<h2>
+🤍 တကယ်တော့…
+</h2>
+
+<p>
+ဖြူက မမကို
+ဘာကြီးမှ တောင်းဆိုနေတာမဟုတ်ဘူး…
+</p>
+
+<div class="checklist">
+
+<div class="check">
+🤍 မမကျန်းမာပါစေ
+</div>
+
+<div class="check">
+🌙 ကောင်းကောင်းအိပ်ပါစေ
+</div>
+
+<div class="check">
+🍚 အစားမှန်မှန်စားပါစေ
+</div>
+
+<div class="check">
+📚 စာကြိုးစားနိုင်ပါစေ
+</div>
+
+<div class="check">
+🫶🏻 နေမကောင်းရင် အကူအညီတောင်းနိုင်ပါစေ
+</div>
+
+<div class="check">
+🌷 နေ့တိုင်း ကိုယ့်ကိုယ်ကို ဂရုစိုက်နိုင်ပါစေ
+</div>
+
+</div>
+
+<p>
+ဒါလေးတွေပါပဲ။ 🤍
+</p>
+
+</div>
+`,
+
+/* 27 */
+`
+<div class="card">
+
+<div class="emoji">🌷🤍</div>
+
+<h2>
+🌷 နောက်ဆုံးအနေနဲ့…
+</h2>
+
+<p>
+ဖြူက မမအနားမှာ
+အချိန်တိုင်း ကိုယ်တိုင်ရှိနေနိုင်မှာတော့ မဟုတ်ဘူး။
+</p>
+
+<p>
+ဒါပေမယ့် မမစိတ်ညစ်တဲ့အချိန်၊
+ပင်ပန်းတဲ့အချိန်၊
+ပျော်တဲ့အချိန်တွေမှာ…
+</p>
+
+<p class="highlight">
+“ဖြူက ငါ့ကို ဂရုစိုက်နေတယ်”
+ဆိုတာလေးကို သတိရပေးနော်။ 🤍
+</p>
+
+<p>
+မမကိုယ်မမ ဂရုစိုက်နေတဲ့အချိန်တိုင်း
+အဲ့ဒီဂရုစိုက်မှုလေးထဲမှာ
+ဖြူ့ရဲ့စိတ်လေးလည်း ပါနေတယ်လို့
+သိထားပေးနော်။ 🌷
+</p>
+
+</div>
+`,
+
+/* 28 */
+`
+<div class="card final">
+
+<div class="emoji">🌙🤍✨</div>
+
+<h1 class="glow">
+မမရေ…
+</h1>
+
+<p>
+မမတစ်ယောက်တည်း မဟုတ်ဘူး။
+</p>
+
+<p class="big highlight">
+မမဘေးမှာ ဖြူရှိတယ်နော်။ 🤍
+</p>
+
+<p>
+မမပျော်တဲ့အချိန်မှာလည်း
+ဖြူ့ကို သတိရပါ။
+</p>
+
+<p>
+မမပင်ပန်းတဲ့အချိန်မှာလည်း
+ဖြူ့ကို သတိရပါ။
+</p>
+
+<p>
+မမစိတ်ညစ်တဲ့အချိန်မှာလည်း
+ဖြူ့ကို သတိရပါနော်။ 🥺
+</p>
+
+<div class="divider"></div>
+
+<p class="big">
+🌙 “ဒီည စောစောအိပ်ပါ မမ။”
+</p>
+
+<p class="big">
+🤍 “မနက်ဖြန်လည်း
+ကျန်းကျန်းမာမာနဲ့ နိုးလာပါ။”
+</p>
+
+</div>
+`,
+
+/* 29 */
+`
+<div class="card final">
+
+<div class="emoji">
+🌙🤍✨
+</div>
+
+<p>
+မမရေ…
+ကိုယ့်ကိုယ်ကိုလည်း နေ့တိုင်း
+နူးနူးညံ့ညံ့လေး ဂရုစိုက်ပေးနော်။ 🥺🤍
+</p>
+
+<div class="divider"></div>
+
+<p class="big highlight">
+ဒါကတော့ ဖြူ့ရဲ့
+<br>
+little wish for you. 🫶🏻
+</p>
+
+<div class="divider"></div>
+
+<h1>
+— ဖြူ 🤍
+</h1>
+
+<button class="primary" onclick="restart(event)">
+🔄 အစကနေ ပြန်ကြည့်မယ်
+</button>
+
+</div>
+`
+
+];
+
+let current = 0;
+
+const app =
+document.getElementById("app");
+
+const progress =
+document.getElementById("progress");
+
+
+function createScenes(){
+
+  scenes.forEach((html,index)=>{
+
+    const scene =
+    document.createElement("section");
+
+    scene.className="scene";
+
+    if(index===0){
+      scene.classList.add("active");
+    }
+
+    scene.innerHTML=html;
+
+    app.appendChild(scene);
+
+  });
+
+  createProgress();
+}
+
+
+function createProgress(){
+
+  progress.innerHTML="";
+
+  scenes.forEach((_,index)=>{
+
+    const dot =
+    document.createElement("div");
+
+    dot.className="dot";
+
+    if(index===current){
+      dot.classList.add("active");
+    }
+
+    progress.appendChild(dot);
+
+  });
+
+}
+
+
+function showScene(index){
+
+  if(index<0){
+    index=0;
+  }
+
+  if(index>=scenes.length){
+    index=scenes.length-1;
+  }
+
+  const all =
+  document.querySelectorAll(".scene");
+
+  all.forEach((scene,i)=>{
+
+    scene.classList.toggle(
+      "active",
+      i===index
+    );
+
+  });
+
+  current=index;
+
+  const dots =
+  document.querySelectorAll(".dot");
+
+  dots.forEach((dot,i)=>{
+
+    dot.classList.toggle(
+      "active",
+      i===current
+    );
+
+  });
+
+  if(current===scenes.length-1){
+
+    document.getElementById("hint")
+    .textContent="🤍";
+
+  }else{
+
+    document.getElementById("hint")
+    .textContent="tap to continue 🤍";
+
+  }
+
+}
+
+
+function nextScene(){
+
+  if(current<scenes.length-1){
+
+    createHearts(3);
+
+    showScene(current+1);
+
+  }
+
+}
+
+
+function previousScene(){
+
+  if(current>0){
+
+    showScene(current-1);
+
+  }
+
+}
+
+
+function answer(event){
+
+  event.stopPropagation();
+
+  createConfetti();
+  createHearts(20);
+
+  setTimeout(()=>{
+
+    showScene(current+1);
+
+  },350);
+
+}
+
+
+function restart(event){
+
+  event.stopPropagation();
+
+  createHearts(8);
+
+  showScene(0);
+
+}
+
+
+/* TAP */
+
+document.addEventListener(
+"click",
+function(event){
+
+  if(
+    event.target.tagName==="BUTTON" ||
+    event.target.closest("button")
+  ){
+    return;
+  }
+
+  nextScene();
+
+});
+
+
+/* SWIPE */
+
+let touchStartY=0;
+
+let touchEndY=0;
+
+
+document.addEventListener(
+"touchstart",
+function(e){
+
+  touchStartY =
+  e.changedTouches[0].screenY;
+
+},
+{passive:true}
+);
+
+
+document.addEventListener(
+"touchend",
+function(e){
+
+  touchEndY =
+  e.changedTouches[0].screenY;
+
+  const difference =
+  touchStartY-touchEndY;
+
+  if(Math.abs(difference)>60){
+
+    if(difference>0){
+
+      nextScene();
+
+    }else{
+
+      previousScene();
+
+    }
+
+  }
+
+},
+{passive:true}
+);
+
+
+/* STARS */
+
+function createStars(){
+
+  for(let i=0;i<90;i++){
+
+    const star =
+    document.createElement("div");
+
+    star.className="star";
+
+    star.style.left =
+    Math.random()*100+"%";
+
+    star.style.top =
+    Math.random()*100+"%";
+
+    star.style.animationDelay =
+    Math.random()*3+"s";
+
+    const size =
+    Math.random()*3+1;
+
+    star.style.width=size+"px";
+    star.style.height=size+"px";
+
+    document.body.appendChild(star);
+
+  }
+
+}
+
+
+/* HEARTS */
+
+function createHearts(amount=5){
+
+  const emojis=[
+    "🤍",
+    "💗",
+    "💖",
+    "💕",
+    "🌷",
+    "✨"
+  ];
+
+  for(let i=0;i<amount;i++){
+
+    const heart =
+    document.createElement("div");
+
+    heart.className="heart";
+
+    heart.textContent =
+    emojis[
+      Math.floor(
+        Math.random()*emojis.length
+      )
+    ];
+
+    heart.style.left =
+    Math.random()*90+5+"vw";
+
+    heart.style.top =
+    Math.random()*70+20+"vh";
+
+    heart.style.fontSize =
+    Math.random()*16+16+"px";
+
+    heart.style.animationDelay =
+    Math.random()*.4+"s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>{
+
+      heart.remove();
+
+    },3200);
+
+  }
+
+}
+
+
+/* CONFETTI */
+
+function createConfetti(){
+
+  for(let i=0;i<70;i++){
+
+    const piece =
+    document.createElement("div");
+
+    piece.className="confetti";
+
+    piece.style.left="50vw";
+    piece.style.top="45vh";
+
+    piece.style.setProperty(
+      "--x",
+      ((Math.random()-.5)*100)+"vw"
+    );
+
+    piece.style.setProperty(
+      "--y",
+      ((Math.random()-.2)*100)+"vh"
+    );
+
+    document.body.appendChild(piece);
+
+    setTimeout(()=>{
+
+      piece.remove();
+
+    },2500);
+
+  }
+
+}
+
+
+/* START */
+
+createStars();
+
+createScenes();
+
+setTimeout(()=>{
+
+  createHearts(5);
+
+},800);
+
+</script>
+
+</body>
+</html>
